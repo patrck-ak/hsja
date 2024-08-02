@@ -120,7 +120,6 @@ date_default_timezone_set('America/Sao_Paulo');
             }
 
             $doc = @$_POST["documento"];
-            $q = "SELECT DS_PERGUNTA FROM pergunta WHERE CD_PERGUNTA = ";
             if (isset($doc)) {
               $req = $mysqli->query("SELECT CD_PERGUNTA FROM documento_pergunta WHERE CD_DOCUMENTO = $doc"); //* perguntas do doc selecionado.
               $lista = mysqli_fetch_all($req);
@@ -139,15 +138,64 @@ date_default_timezone_set('America/Sao_Paulo');
                   $pgt = $mysqli->query("SELECT TP_REPOSTA FROM pergunta WHERE CD_PERGUNTA = $a");
                   $rpgt = mysqli_fetch_all($pgt);
                   $tpgt = implode($rpgt[0]);
-                  echo "<tr> <td> <input disabled class='form-control' type='text' id='$a' value='$c'> </td> <td> <input name='$a' required class='form-control' type=" . tpResposta($tpgt) . "> </td> </tr>";
+                  echo "<tr> <td> <input disabled class='form-control' type='text' ' id='$a' value='$c'> </td> <td> <input name='$a' class='form-control' type=" . tpResposta($tpgt) . "> </td> </tr>";
                 }
               }
             }
+
+            //? 1 number | 2 Nome | 3 Data | Validade | 4 Anexo | 5 Obs
+            $num = @$_POST['1'];
+            $text = @$_POST['2'];
+            $valid = @$_POST['3'];
+            $anexo = @$_POST['4'];
+            $obs = @$_POST['5'];
+            $data = @$_POST['dataAtual'];
+            $nrRegistro = @$_POST['nrRegistro'];
+
+
+            if ($num || $text || $valid || $anexo || $obs) {
+              switch ($doc) {
+                case '1':
+                  $nc = 1;
+                  break;
+                case '2':
+                  $nc = 2;
+                  break;
+                default:
+                  break;
+              }
+              //? registrar dado no documento_registro
+              $q = $mysqli->query("INSERT INTO documento_registro (CD_DOCUMENTO, DT_REGISTRO, NR_REGISTRO) VALUES (1, '$data', '$nrRegistro')");
+              if ($q) {
+                echo '<div style="position: relative; display: flex; justify-content: center;"><p">Cadastro Efetuado</p></div>';
+              } else {
+                echo '<div style="position: relative; display: flex; justify-content: center;"><p">Erro ao cadastrar</p></div>';
+              }
+              // //? retornar ultimo CD_DOCUMENTO
+              // $h = $mysqli->query("SELECT CD_DOCUMENTO_REGISTRO FROM documento_registro ORDER BY CD_DOCUMENTO_REGISTRO DESC LIMIT 1");
+              // $ultimoRegistro = implode(mysqli_fetch_array($h))[0];
+              // //? registrar resposta
+              // if ($num) {
+              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_NUMERO) VALUES (, $ultimoRegistro, $num)");
+              // }
+              // if ($text) {
+              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_TEXTO) VALUES (, $ultimoRegistro, '$text')");
+              // }
+              // if ($valid) {
+              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_DATA) VALUES (, $ultimoRegistro, '$valid')");
+              // }
+              // if ($anexo) {
+              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_ANEXO) VALUES (, $ultimoRegistro, '$anexo')");
+              // }
+              // if ($obs) {
+              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_TEXTO) VALUES (, $ultimoRegistro, '$obs')");
+              // }
+            
+            }
             ?>
+
           </tbody>
-
         </table>
-
         <div class="containerBotoes">
           <input class="btn btn-success" type="submit" id="inserirDoc" value="Cadastrar">
           <input class="btn btn-success" type="reset" id="limpar">
@@ -158,29 +206,7 @@ date_default_timezone_set('America/Sao_Paulo');
 
       </form>
     </div>
-    <?php
-    $a = @$_POST['1']; //? N Declaração
-    $b = @$_POST['2']; //? Nome
-    $c = @$_POST['3']; //? Data Validade
-    $d = @$_POST['4']; //? Anexo
-    $e = @$_POST['5']; //? Obs
-    
-    if (isset($a)) {
-      $in = $mysqli->query('INSERT INTO') or die('erro ao inserir dados.');
-    }
 
-
-    // if(isset($b)) {}
-    // if(isset($c)) {}
-    // if(isset($d)) {}
-    // if(isset($e)) {}
-    
-    ?>
   </body>
 
 </html>
-
-
-<!-- <p>
-
-      </p> -->

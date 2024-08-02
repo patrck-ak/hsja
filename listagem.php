@@ -76,7 +76,6 @@
       <hr />
 
       <div class="margemTab">
-        <h4> <?php echo $selectedUser ?></h4> <!-- debug -->
         <table class="table table-bordered table-striped text-center table-hover">
           <thead>
             <tr>
@@ -85,7 +84,6 @@
           </thead>
           <tbody>
             <tr>
-              <td>a</td>
             </tr>
           </tbody>
         </table>
@@ -98,7 +96,6 @@
           </thead>
           <tbody>
             <tr>
-              <td>a</td>
             </tr>
           </tbody>
         </table>
