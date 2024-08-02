@@ -1,0 +1,79 @@
+html {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+table.limiter {
+  width: 80%;
+  margin: 0 auto;
+}
+
+div.containerExt {
+  min-width: 800px;
+  border: 2px solid #3f3f46;
+  border-radius: 10px;
+  margin-top: 10px;
+  width: 80vw;
+  height: 60vh;
+  background-color: #e4e4e7;
+}
+
+div.margemTab {
+  margin: 0 auto;
+  width: 90%;
+}
+
+div.header {
+  margin-top: 10px;
+  padding: 10px;
+  position: relative;
+  left: 10px;
+  width: 97%;
+  display: flex;
+  align-items: center;
+}
+
+label.labelData {
+  position: relative;
+  top: -25px;
+  left: 50px;
+}
+
+label.labelNr {
+  position: absolute;
+  top: -25px;
+  right: 100px;
+}
+
+span.containerHeader {
+  position: absolute;
+  left: 40vw;
+  top: 35px;
+  gap: 10px;
+  margin: 0 auto;
+  max-width: fit-content;
+  display: flex;
+}
+
+div.containerBotoes {
+  position: absolute;
+  top: 63vh; // 63vh; arrumar altura dos botoes
+}
+
+div.filtros {
+  padding: 10px;
+  position: relative;
+  left: 10px;
+  width: 96%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+
+select.selectUser {
+  width: fit-content;
+}

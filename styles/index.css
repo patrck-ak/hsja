@@ -1,0 +1,48 @@
+html {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form.form {
+  border: 2px solid #3f3f46;
+  border-radius: 10px;
+  margin-top: 10px;
+  width: 80vw;
+  height: 80vh;
+  background-color: #e4e4e7;
+}
+
+div.margemTab {
+  margin: 0 auto;
+  width: 90%;
+  display: flex;
+}
+
+div.header {
+  margin-top: 10px;
+  padding: 10px;
+  position: relative;
+  left: 10px;
+  width: 97%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+div.filtros {
+  padding: 10px;
+  position: relative;
+  left: 10px;
+  width: 96%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+
+select.selectUser {
+  width: fit-content;
+}
