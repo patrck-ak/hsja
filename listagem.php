@@ -15,7 +15,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-      </script>
+    </script>
     <!--   -->
 
   </head>
@@ -76,7 +76,7 @@
       <hr />
 
       <div class="margemTab">
-        <h4> <?php echo $selectedUser ?></h4>
+        <h4> <?php echo $selectedUser ?></h4> <!-- debug -->
         <table class="table table-bordered table-striped text-center table-hover">
           <thead>
             <tr>
