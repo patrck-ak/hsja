@@ -1,13 +1,9 @@
 function nav(l) {
-  switch (l) {
-    case "cadastro":
-      window.location.replace("http://localhost/hsja/cadastro.php");
-      break;
-    case 1:
-      window.location.replace("http://localhost/hsja/listagem.php");
-      break;
-    default:
-      alert("erro na navegação.");
-      break;
+  if (l == 1) {
+    window.location.replace("http://localhost/hsja/cadastro.php");
+  } else if (l == 2) {
+    window.location.replace("http://localhost/hsja/listagem.php");
+  } else if (l == 3) {
+    window.location.replace("http://localhost/hsja/usuario.php");
   }
 }

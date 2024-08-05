@@ -15,14 +15,14 @@ div.containerExt {
   border: 2px solid #3f3f46;
   border-radius: 10px;
   margin-top: 10px;
-  width: 80vw;
+  width: 95vw;
   height: 60vh;
   background-color: #e4e4e7;
 }
 
 div.margemTab {
   margin: 0 auto;
-  width: 90%;
+  width: 100%;
 }
 
 div.header {
@@ -37,13 +37,13 @@ div.header {
 
 label.labelData {
   position: relative;
-  top: -25px;
+  top: -30px;
   left: 50px;
 }
 
 label.labelNr {
   position: absolute;
-  top: -25px;
+  top: -30px;
   right: 100px;
 }
 

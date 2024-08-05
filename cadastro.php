@@ -28,7 +28,7 @@ date_default_timezone_set('America/Sao_Paulo');
     <div class="containerExt">
 
       <!-- cabeçalho do formulário -->
-      <form method="post" action="">
+      <form method="get" action="">
         <div class="header">
           <?php
           //? validar se o usuário selecionado tem permissao para editar documentos.
@@ -42,22 +42,18 @@ date_default_timezone_set('America/Sao_Paulo');
               $docId = $acesso[0];
             } else {
               echo '<b>Usuário não tem permissão para cadastrar documentos.</b> <br/>';
-              echo "<input class='btn btn-success' style='margin-left: 10px;' value='Voltar para listagem' type='button' onclick='nav(1)'>";
+              echo "<input class='btn btn-success' style='margin-left: 10px;' value='Voltar para listagem' type='button' onclick='nav(2)'>";
               exit(); //? para a renderização da página.
             }
-
           }
           ?>
 
-          <select title="Documento" name="documento" class="form-select selectUser">
+          <select title="Documento" id="documento" name="documento" class="form-select selectUser">
             <?php
-
             if (isset($usuario) && isset($docId)) {
 
               //? verificação se o usuario selecionado tem permissão de CA
-            
               $query_docs = "SELECT DS_DOCUMENTO FROM documento WHERE CD_DOCUMENTO = $docId;";
-
               //* query de listagem de usuarios
               $req = $mysqli->query($query_docs) or die("Erro ao conectar com o banco.: $mysqli->error");
               $rows = mysqli_num_rows($req); //? quantidade de usuarios
@@ -97,7 +93,7 @@ date_default_timezone_set('America/Sao_Paulo');
           <tbody>
 
             <?php
-            function tpResposta($tp)
+            function tpResposta($tp) // Retorno mysql -> Type input
             {
               $r = '';
               switch ($tp) { //? função para retornar de acordo com o banco, qual tipo de input será renderizado.
@@ -119,79 +115,92 @@ date_default_timezone_set('America/Sao_Paulo');
               return $r;
             }
 
-            $doc = @$_POST["documento"];
+            $doc = @$_GET["documento"]; // recebe cd_documento
             if (isset($doc)) {
-              $req = $mysqli->query("SELECT CD_PERGUNTA FROM documento_pergunta WHERE CD_DOCUMENTO = $doc"); //* perguntas do doc selecionado.
+              $req = $mysqli->query("SELECT CD_PERGUNTA FROM documento_pergunta WHERE CD_DOCUMENTO = $doc"); // perguntas do doc selecionado.
               $lista = mysqli_fetch_all($req);
               $rows = mysqli_num_rows($req);
               $ind = 1;
-              for ($i = 0; $i < $rows; $i++) { //? loop para retonar e printar todas as perguntas de cada doc
+              for ($i = 0; $i < $rows; $i++) { // loop para retonar e printar todas as perguntas de cada doc
             
                 $ind++;
-                $a = implode($lista[$i]);
-                $r = $mysqli->query("SELECT DS_PERGUNTA FROM pergunta WHERE CD_PERGUNTA = $a");
+                $a = implode($lista[$i]); // recebe lista dos CD_PERGUNTA
+                $r = $mysqli->query("SELECT DS_PERGUNTA FROM pergunta WHERE CD_PERGUNTA = $a"); // recebe titulo das perguntas
                 $f = mysqli_fetch_all($r);
                 $c = implode($f[0]);
 
                 //? retornar tp de pergunta
                 if (isset($c)) {
-                  $pgt = $mysqli->query("SELECT TP_REPOSTA FROM pergunta WHERE CD_PERGUNTA = $a");
-                  $rpgt = mysqli_fetch_all($pgt);
-                  $tpgt = implode($rpgt[0]);
-                  echo "<tr> <td> <input disabled class='form-control' type='text' ' id='$a' value='$c'> </td> <td> <input name='$a' class='form-control' type=" . tpResposta($tpgt) . "> </td> </tr>";
+                  $pgt = $mysqli->query("SELECT TP_REPOSTA FROM pergunta WHERE CD_PERGUNTA = $a"); // recebe TP_PERGUNTA
+                  $tpgt = implode(mysqli_fetch_all($pgt)[0]);
+                  echo "<tr> <td> <input disabled class='form-control' type='text' id='$a' value='$c'> </td> <td> <input name='$a' class='form-control' type=" . tpResposta($tpgt) . "> </td> </tr>";
                 }
               }
             }
 
-            //? 1 number | 2 Nome | 3 Data | Validade | 4 Anexo | 5 Obs
-            $num = @$_POST['1'];
-            $text = @$_POST['2'];
-            $valid = @$_POST['3'];
-            $anexo = @$_POST['4'];
-            $obs = @$_POST['5'];
+            $num = @$_POST['1']; // 1 number
+            $text = @$_POST['2']; // 2 Nome
+            $valid = @$_POST['3']; // 3 Data
+            $anexo = @$_POST['4']; // 4 Anexo
+            $obs = @$_POST['5']; // 5 Obs
             $data = @$_POST['dataAtual'];
             $nrRegistro = @$_POST['nrRegistro'];
 
-
-            if ($num || $text || $valid || $anexo || $obs) {
-              switch ($doc) {
+            function stringToInt($stg)
+            {
+              $a = 0;
+              switch ($stg) {
                 case '1':
-                  $nc = 1;
+                  $a = 1;
                   break;
                 case '2':
-                  $nc = 2;
-                  break;
-                default:
+                  $a = 2;
                   break;
               }
-              //? registrar dado no documento_registro
-              $q = $mysqli->query("INSERT INTO documento_registro (CD_DOCUMENTO, DT_REGISTRO, NR_REGISTRO) VALUES (1, '$data', '$nrRegistro')");
-              if ($q) {
-                echo '<div style="position: relative; display: flex; justify-content: center;"><p">Cadastro Efetuado</p></div>';
-              } else {
-                echo '<div style="position: relative; display: flex; justify-content: center;"><p">Erro ao cadastrar</p></div>';
-              }
-              // //? retornar ultimo CD_DOCUMENTO
-              // $h = $mysqli->query("SELECT CD_DOCUMENTO_REGISTRO FROM documento_registro ORDER BY CD_DOCUMENTO_REGISTRO DESC LIMIT 1");
-              // $ultimoRegistro = implode(mysqli_fetch_array($h))[0];
-              // //? registrar resposta
-              // if ($num) {
-              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_NUMERO) VALUES (, $ultimoRegistro, $num)");
-              // }
-              // if ($text) {
-              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_TEXTO) VALUES (, $ultimoRegistro, '$text')");
-              // }
-              // if ($valid) {
-              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_DATA) VALUES (, $ultimoRegistro, '$valid')");
-              // }
-              // if ($anexo) {
-              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_ANEXO) VALUES (, $ultimoRegistro, '$anexo')");
-              // }
-              // if ($obs) {
-              //   $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_TEXTO) VALUES (, $ultimoRegistro, '$obs')");
-              // }
-            
+              return $a;
             }
+
+            if (isset($doc)) {
+              $formated = stringToInt($doc);
+              if ($num || $text || $valid || $anexo || $obs) {
+                //? registrar dado no documento_registro
+                $q = $mysqli->query("INSERT INTO documento_registro (CD_DOCUMENTO, DT_REGISTRO, NR_REGISTRO) VALUES ('$formated', '$data', '$nrRegistro')");
+                if ($q) {
+                  echo '<div style="position: relative; display: flex; justify-content: center;"><p">Cadastro Efetuado</p></div>';
+                } else {
+                  echo '<div style="position: relative; display: flex; justify-content: center;"><p">Erro ao cadastrar</p></div>';
+                }
+
+                //? retornar ultimo CD_DOCUMENTO
+                $h = $mysqli->query("SELECT CD_DOCUMENTO_REGISTRO FROM documento_registro ORDER BY CD_DOCUMENTO_REGISTRO DESC LIMIT 1");
+                $ultimoRegistro = implode(mysqli_fetch_all($h)[0]);
+
+                //? registrar resposta
+                if ($num) { // numero de declaração
+                  $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_NUMERO) VALUES (1, $ultimoRegistro, $num)");
+                }
+                if ($text) { // nome
+                  $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_TEXTO) VALUES (2, $ultimoRegistro, '$text')");
+                }
+                if ($valid) { // data de validade
+                  $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_DATA) VALUES (3, $ultimoRegistro, '$valid')");
+                }
+                if ($anexo) {
+                  $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_ANEXO) VALUES (4, $ultimoRegistro, '$anexo')");
+                }
+                if ($obs) {
+                  if ($formated == 1) {
+                    $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_TEXTO) VALUES (5, $ultimoRegistro, '$obs')");
+                  } elseif ($formated == 2) {
+                    $q = $mysqli->query("INSERT INTO resposta (CD_DOCUMENTO_PERGUNTA, CD_DOCUMENTO_REGISTRO, DS_RESPOSTA_TEXTO) VALUES (6, $ultimoRegistro, '$obs')");
+                  }
+                }
+              }
+            } else {
+              echo '<p style="text-align: center;">Selecione um documento.</p>';
+              exit();
+            }
+
             ?>
 
           </tbody>
@@ -199,7 +208,7 @@ date_default_timezone_set('America/Sao_Paulo');
         <div class="containerBotoes">
           <input class="btn btn-success" type="submit" id="inserirDoc" value="Cadastrar">
           <input class="btn btn-success" type="reset" id="limpar">
-          <input class="btn btn-success" value="Voltar" type="button" onclick="nav(1)">
+          <input class="btn btn-success" value="Voltar" type="button" onclick="nav(2)">
         </div>
 
 
